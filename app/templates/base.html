@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  {% if title %}
+  <title>{{ title }} - Sternburg Bingo</title>
+  {% else %}
+  <title>Sternburg Bingo</title>
+  {% endif %}
+</head>
+<body>
+  <div>Sternburg Bingo: 
+    <ul>
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      {% if current_user.is_authenticated %}
+      <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      {% else %}
+      <li><a href="{{ url_for('oauth_authorize', provider='facebook') }}">Login with Facebook</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  <hr>
+  {% for message in get_flashed_messages() %}
+  <p><b>Error:</b> {{ message }}</p>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</body>
+</html>
