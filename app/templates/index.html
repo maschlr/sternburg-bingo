@@ -6,21 +6,25 @@
 {% endblock %}
 {% block content %}
   {% if g.user.is_authenticated %}
-    <div data-bind="foreach: caps">
-      <div>
-        <svg width=70 height=70>
-          <circle cx="35" cy="35" r="30" stroke="black" stroke-width="2" fill="red" />
-          <polygon points="35, 5 17.366442431225803, 59.270509831248425 63.53169548885461, 25.729490168751582 6.468304511145394, 25.729490168751575 52.633557568774194, 59.270509831248425"
-          style="fill:white;fill-rule:nonzero;" />
-          <text x="35" y="40" fill="black" text-anchor="middle" data-bind="text: number"></text>
-        </svg>
-      </div>
-      <p>
-        <button class="btn" data-bind="click: $parent.remove"><i class="icon-minus"></i></button>
-        <span data-bind="text: count"></span>
-        <button class="btn" data-bind="click: $parent.add"><i class="icon-plus"></i></button>
-      </p>
-    </div>
+  <table class="table table-bordered" data-bind="foreach: rows">
+    <tbody>
+      <tr data-bind="foreach: $data">
+        <td>
+          <svg width=70 height=70>
+            <circle cx="35" cy="35" r="30" stroke="black" stroke-width="2" fill="red" />
+            <polygon points="35, 5 17.366442431225803, 59.270509831248425 63.53169548885461, 25.729490168751582 6.468304511145394, 25.729490168751575 52.633557568774194, 59.270509831248425"
+            style="fill:white;fill-rule:nonzero;" />
+            <text x="35" y="40" fill="black" text-anchor="middle" data-bind="text: number"></text>
+          </svg>
+          <p>
+            <button class="btn" data-bind="click: $root.remove"><i class="icon-minus"></i></button>
+            <span data-bind="text: count"></span>
+            <button class="btn" data-bind="click: $root.add"><i class="icon-plus"></i></button>
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   {% else %}
     <h2>Bitte einloggen um Bingo zu spielen</h2>
   {% endif %}
