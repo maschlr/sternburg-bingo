@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  {% if g.user.is_authenticated %}
+    <h1>Hi, {{ user.nickname }}!</h1>
+    {% for column in range(1, 10) %}
+    {% for row in range(1, 10) %}
+      <div>
+        <p></p>
+        <p></p>
+      </div>
+    {% for cap in caps %}
+      {% if cap.count %}
+      <div>{{cap.number}}: {{ cap.count }}</div>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <h1>Bitte einloggen um Bingo zu spielen</h1>
+  {% endif %}
+{% endblock %}

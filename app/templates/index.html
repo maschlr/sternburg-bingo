@@ -1,9 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Hello, {{ user.nickname }}!</h1>
-  {% for cap in caps %}
-  {% if cap.count %}
-  <div>{{cap.number}}: {{ cap.count }}</div>
+  {% if g.user.is_authenticated %}
+    <h1>Hi, {{ user.nickname }}!</h1>
+      {% for row in rows %}
+      <div class="pure-g">
+        {% for cap in row %}
+        <div class='pure-u-2-12'>
+          <div style='letter-spacing: 0em'>
+            <svg width=200 height=200>
+              <circle cx="100" cy="100" r="90" stroke="black" stroke-width="3" fill="red" />
+              <polygon points="100,10 47.099327293677405,172.81152949374527 185.59508646656383,72.18847050625475 14.404913533436186,72.18847050625473 152.90067270632258,172.81152949374527"
+              style="fill:white;fill-rule:nonzero;" />
+              <text x="100" y="100" fill="black" text-anchor="middle">{{ cap.number }}</text>
+            </svg>
+          </div>
+          <p>{{ cap.count }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+  {% else %}
+    <h1>Bitte einloggen um Bingo zu spielen</h1>
   {% endif %}
-  {% endfor %}
 {% endblock %}

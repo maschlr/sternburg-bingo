@@ -1,20 +1,35 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, redirect, url_for, render_template
-from app import app, db, login_user, logout_user, current_user
+from flask import redirect, url_for, render_template, request, g, flash, session, jsonify
+from flask.ext.login import login_user, logout_user, current_user, login_required
+from app import app, db, lm
 from app.oauth import OAuthSignIn
 from .models import User, Cap
-import random
 
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'nickname': 'Marten'}
-    caps = [{'number': number,
-             'count': count} for number, count in zip(range(1,100), (random.randint(0,5) for i in range(99)))]
-    return render_template('index.html',
-                           title='Home',
-                           user=user,
-                           caps=caps)
+    user = g.user
+    if user.is_authenticated:
+        caps = user.caps.all()
+        rows = []
+        for i in range(16):
+            rows.append(caps[i*6:(i+1)*6])
+        rows.append(caps[8*12:])
+        return render_template('index.html',
+                               title='Home',
+                               user=user,
+                               caps=caps,
+                               rows=rows)
+    else:
+        return render_template('index.html')
+
+@app.route('/caps')
+@login_required
+def get_caps():
+    user = g.user
+    caps = user.caps.all()
+    return jsonify({"caps": [cap.count for cap in caps]})
+
 
 @app.route('/logout')
 def logout():
@@ -43,6 +58,13 @@ def oauth_callback(provider):
     if not user:
         user = User(social_id=social_id, nickname=username, email=email)
         db.session.add(user)
+        for c in range(1, 100):
+            cap = Cap(number=c, count=0, owner=user)
+            db.session.add(cap)
         db.session.commit()
     login_user(user, True)
     return redirect(url_for('index'))
+
+@app.before_request
+def before_request():
+    g.user = current_user
