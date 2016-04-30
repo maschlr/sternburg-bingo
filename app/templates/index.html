@@ -1,25 +1,27 @@
 {% extends "base.html" %}
+{% block scripts %}
+{% if g.user.is_authenticated %}
+<script src="/static/js/index.js"></script>
+{% endif %}
+{% endblock %}
 {% block content %}
   {% if g.user.is_authenticated %}
-    <h1>Hi, {{ user.nickname }}!</h1>
-      {% for row in rows %}
-      <div class="pure-g">
-        {% for cap in row %}
-        <div class='pure-u-2-12'>
-          <div style='letter-spacing: 0em'>
-            <svg width=200 height=200>
-              <circle cx="100" cy="100" r="90" stroke="black" stroke-width="3" fill="red" />
-              <polygon points="100,10 47.099327293677405,172.81152949374527 185.59508646656383,72.18847050625475 14.404913533436186,72.18847050625473 152.90067270632258,172.81152949374527"
-              style="fill:white;fill-rule:nonzero;" />
-              <text x="100" y="100" fill="black" text-anchor="middle">{{ cap.number }}</text>
-            </svg>
-          </div>
-          <p>{{ cap.count }}</p>
-        </div>
-        {% endfor %}
+    <div data-bind="foreach: caps">
+      <div>
+        <svg width=70 height=70>
+          <circle cx="35" cy="35" r="30" stroke="black" stroke-width="2" fill="red" />
+          <polygon points="35, 5 17.366442431225803, 59.270509831248425 63.53169548885461, 25.729490168751582 6.468304511145394, 25.729490168751575 52.633557568774194, 59.270509831248425"
+          style="fill:white;fill-rule:nonzero;" />
+          <text x="35" y="40" fill="black" text-anchor="middle" data-bind="text: number"></text>
+        </svg>
       </div>
-      {% endfor %}
+      <p>
+        <button class="btn" data-bind="click: $parent.remove"><i class="icon-minus"></i></button>
+        <span data-bind="text: count"></span>
+        <button class="btn" data-bind="click: $parent.add"><i class="icon-plus"></i></button>
+      </p>
+    </div>
   {% else %}
-    <h1>Bitte einloggen um Bingo zu spielen</h1>
+    <h2>Bitte einloggen um Bingo zu spielen</h1>
   {% endif %}
 {% endblock %}
