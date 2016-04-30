@@ -2,6 +2,7 @@ function IndexViewModel() {
   var self = this;
   self.capsURI = "/caps"
   self.caps = ko.observableArray();
+  self.rows = ko.observableArray();
 
   self.ajax = function(uri, method, data) {
     var request = {
@@ -44,6 +45,8 @@ function IndexViewModel() {
         number: data.caps[i].number,
         count: ko.observable(data.caps[i].count)
       });
+    for (var i=0; i<20; i++) {
+      self.rows.push(ko.observableArray(self.caps().slice(i*5, (i+1)*5)));
     }
   });
 }
