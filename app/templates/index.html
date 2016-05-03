@@ -6,7 +6,8 @@
 {% endblock %}
 {% block content %}
   {% if g.user.is_authenticated %}
-  <div class="row" data-bind="foreach: matches">
+  <div class="row" data-bind="foreach: bingos">
+    <!-- ko if: allOwned -->
     <div class="alert alert-success" role="alert">
       <!-- ko foreach: numbers -->
         <svg width=70 height=70>
@@ -18,6 +19,7 @@
       <!-- /ko -->
       <button class="btn" data-bind="click: $parent.removeAll"><i class="icon-check"></i></button>
     </div>
+    <!-- /ko -->
   </div>
 
   <table class="table table-bordered" data-bind="foreach: rows">

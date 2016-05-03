@@ -3,9 +3,14 @@ function IndexViewModel() {
   self.capsURI = "/caps"
   self.caps = ko.observableArray();
   self.rows = ko.observableArray();
-  self.matches = ko.observableArray();
   // this function is defined in helpers.js. It generates all possible bingos (horizonal, vertical, diagonal) from the five (hardcoded) bingo fields
   self.allBingos = allBingos();
+  self.bingos = ko.observableArray();
+
+  for (var i in self.allBingos) {
+    self.bingos.push({numbers: self.allBingos[i],
+                      allOwned: ko.observable(false)});
+  }
 
   self.ajax = function(uri, method, data) {
     var request = {
@@ -23,9 +28,9 @@ function IndexViewModel() {
     return $.ajax(request);
   }
 
-  self.removeAll = function(match) {
-    self.checkBingos()
-    var matchedCaps = self.caps().filter(function(cap) {return match.numbers.indexOf(cap.number) > -1});
+  self.removeAll = function(bingo) {
+    // decimate all matched numbers by one
+    var matchedCaps = self.caps().filter(function(cap) {return bingo.numbers.indexOf(cap.number) > -1});
     for (var i in matchedCaps) {
       self.remove(matchedCaps[i]);
     }
@@ -56,40 +61,22 @@ function IndexViewModel() {
 
   self.checkBingos = function() {
     // updates the list of bingos
-    var currentMatches = [];
     var ownedNumbers = self.caps().filter(function(cap) {return cap.count() > 0})
                                   .map(function(cap) {return cap.number});
-    for (var i=0; i<self.allBingos.length; i++) {
-      if (self.allBingos[i].map(function(number) {return ownedNumbers.indexOf(number) > -1})
-                           .filter(function(bool) {return bool}).length === 5) {
-        var match = {index: i, numbers: self.allBingos[i]};
-        currentMatches.push(match);
+    for (var i in self.bingos()) {
+      var numHits = self.bingos()[i].numbers.filter(function(number) {return ownedNumbers.indexOf(number) > -1}).length
+      if (numHits < 5) {
+        self.bingos()[i].allOwned(false);
+      } else if (numHits === 5) {
+        self.bingos()[i].allOwned(true);
+      } else {
+        console.log("Something is terribly wrong...");
       }
-    }
-
-    // since our list of all the possible bingos is static, we only need to compare the index
-    var newIndexes = currentMatches.map(function(match) {return match.index});
-    // if an element is not in the current list, remove it from the ko.observableArray
-    for (var i in self.matches()) {
-      if (newIndexes.indexOf(self.matches()[i].index) < 0) {
-        self.matches.splice(i,1);
-      }
-    }
-
-    var oldIndexes = self.matches().map(function(match) {return match.index});
-    // if the index of one of the current matches is not in the ko.observableArray, add it 
-    for (var i in currentMatches) {
-      if (oldIndexes.indexOf(currentMatches[i].index) < 0) {
-        self.matches.push(currentMatches[i]);
-      }
-    }
-
-    if (self.matches().length > 0) {
-      console.log(self.matches());
     }
   }
 
   self.ajax(self.capsURI, 'GET').done(function(data) {
+    // initialize our caps from the database
     for (var i=0; i<data.caps.length; i++) {
       self.caps.push({
         number: data.caps[i].number,
