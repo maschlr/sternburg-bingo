@@ -24,7 +24,9 @@ var rawFields = [[[85, 61, 19, 27, 78],
                  [25, 96, 78, 13, 68],
                  [47, 35, 1, 66, 89]]]
 
-function allBingos() {
+
+function getAllBingos() {
+  // returns all possible bingo combinations
   var winnerCombinations = [];
   for (var i = 0; i<5; i++) {
     var columns = [[],[],[],[],[]];
@@ -50,22 +52,28 @@ function allBingos() {
   return winnerCombinations;
 }
 
-function winningFields() {
-  var winningFields = {};
-  for (var f=0; f<5; f++) {
-    for (var r=0; r<5; r++) {
-      for (var c=0; c<5; c++) {
-        if (!winningFields.hasOwnProperty(rawFields[f][c][r])) {
-          winningFields[rawFields[f][c][r]] = 1;
-        } else {
-          winningFields[rawFields[f][c][r]]++;
-        }
-      }
-    }
+var numberScores = {};
+for (var i = 1; i<100; i++) {
+  numberScores[i] = 0;
+}
+allBingos = getAllBingos();
+for (var i in allBingos) {
+  // calculates a score for each number based on the occurence in bingo rows
+  for (var j in allBingos[i]) {
+    numberScores[allBingos[i][j]] += 1;
   }
-  return winningFields;
 }
 
+function rateBingo(bingo) {
+  // calculates a simple score based on how often a certain number is in other bingos
+  // that way, we can choose a somehow optimal order of winnings
+  var score = 0;
+  for (var i in bingo) {
+    var number = bingo[i];
+    score += numberScores[number];
+  }
+  return score;
+}
 
 function starCoordinates(radius, anchor) {
   // This function calculates the perfect svg five-point star using a rotational matrice

@@ -25,7 +25,7 @@
       <div class="navbar-inner">
         <a class="brand" href="/"><i class="icon-star"></i> Sternburg Bingo <i class="icon-star"></i></a>
         <ul class="nav">
-          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="{{ url_for('index') }}">Kronkorken</a></li>
           {% if current_user.is_authenticated %}
           <li><a href="{{ url_for('bingo') }}">Feldercheck</a></li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>

@@ -4,13 +4,17 @@ function IndexViewModel() {
   self.caps = ko.observableArray();
   self.rows = ko.observableArray();
   // this function is defined in helpers.js. It generates all possible bingos (horizonal, vertical, diagonal) from the five (hardcoded) bingo fields
-  self.allBingos = allBingos();
+  self.allBingos = getAllBingos();
   self.bingos = ko.observableArray();
 
   for (var i in self.allBingos) {
     self.bingos.push({numbers: self.allBingos[i],
-                      allOwned: ko.observable(false)});
+                      allOwned: ko.observable(false),
+                      index: i,
+                      score: rateBingo(self.allBingos[i])});
   }
+
+  self.bingos.sort(function(a, b) {return a.score - b.score});
 
   self.ajax = function(uri, method, data) {
     var request = {
