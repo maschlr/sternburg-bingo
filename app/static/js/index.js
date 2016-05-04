@@ -8,7 +8,9 @@ function IndexViewModel() {
   self.bingos = ko.observableArray();
 
   for (var i in self.allBingos) {
-    self.bingos.push({numbers: self.allBingos[i],
+    self.bingos.push({numbers: self.allBingos[i].numbers,
+                      page: self.allBingos[i].page,
+                      position: self.allBingos[i].position,
                       allOwned: ko.observable(false),
                       index: i,
                       score: rateBingo(self.allBingos[i])});

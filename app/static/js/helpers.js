@@ -28,25 +28,33 @@ var rawFields = [[[85, 61, 19, 27, 78],
 function getAllBingos() {
   // returns all possible bingo combinations
   var winnerCombinations = [];
-  for (var i = 0; i<5; i++) {
+  for (var p=0; p<5; p++) {
     var columns = [[],[],[],[],[]];
     var vertical = [[], []]
     for (var row=0; row<5; row++) {
       // all horizontal bingos
-      winnerCombinations.push(rawFields[i][row]);
+      winnerCombinations.push({numbers: rawFields[p][row],
+                               page: p+1,
+                               position: 'Zeile ' + (row+1)});
       // all vertical bingos
       for (var col=0; col<5; col++) {
-        columns[col].push(rawFields[i][row][col]);
+        columns[col].push(rawFields[p][row][col]);
       }
       // don't forget the vertical ones
-      vertical[0].push(rawFields[i][row][row]);
-      vertical[1].push(rawFields[i][row][4-row]);
+      vertical[0].push(rawFields[p][row][row]);
+      vertical[1].push(rawFields[p][row][4-row]);
     }
-    for (var j=0; j<5; j++) {
-      winnerCombinations.push(columns[j])
+    for (var col=0; col<5; col++) {
+      winnerCombinations.push({numbers: columns[col],
+                               page: p+1,
+                               position: 'Spalte ' + (col+1)});
     }
+    var verticalPositions = ['Links oben nach rechts unten',
+                             'Rechts oben nach links unten']
     for (var k=0; k<2; k++) {
-      winnerCombinations.push(vertical[k]);
+      winnerCombinations.push({numbers: vertical[k],
+                               page: p+1,
+                               position: verticalPositions[k]});
     }
   }
   return winnerCombinations;
@@ -56,7 +64,7 @@ var numberScores = {};
 for (var i = 1; i<100; i++) {
   numberScores[i] = 0;
 }
-allBingos = getAllBingos();
+allBingos = getAllBingos().map(function(bingo) {return bingo.numbers});
 for (var i in allBingos) {
   // calculates a score for each number based on the occurence in bingo rows
   for (var j in allBingos[i]) {
@@ -68,8 +76,8 @@ function rateBingo(bingo) {
   // calculates a simple score based on how often a certain number is in other bingos
   // that way, we can choose a somehow optimal order of winnings
   var score = 0;
-  for (var i in bingo) {
-    var number = bingo[i];
+  for (var i in bingo.numbers) {
+    var number = bingo.numbers[i];
     score += numberScores[number];
   }
   return score;
