@@ -17,13 +17,15 @@
           <text x="35" y="40" fill="black" text-anchor="middle" data-bind="text: $data"></text>
         </svg>
       <!-- /ko -->
+      Seite: <span data-bind="text: page"></span>
+      Reihe: <span data-bind="text: position"></span>
       <button class="btn" data-bind="click: $parent.removeAll"><i class="icon-check"></i></button>
     </div>
     <!-- /ko -->
   </div>
 
-  <table class="table table-bordered" data-bind="foreach: rows">
-    <tbody>
+  <table class="table table-bordered">
+    <tbody data-bind="foreach: rows">
       <tr data-bind="foreach: $data">
         <td>
           <svg width=70 height=70>

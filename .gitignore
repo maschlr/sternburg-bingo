@@ -6,4 +6,5 @@ flask
 *.mo
 config.py
 *.swp
-
+caps.csv
+import_csv.py

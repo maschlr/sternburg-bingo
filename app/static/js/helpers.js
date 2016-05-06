@@ -75,6 +75,8 @@ for (var i in allBingos) {
 function rateBingo(bingo) {
   // calculates a simple score based on how often a certain number is in other bingos
   // that way, we can choose a somehow optimal order of winnings
+  // if all numbers a distributed equal, this is the right way
+  // if we are persuing a user-centric approach (e.g. which is the maximum number of bingos I can get given the caps I have), we have to choose a more dynamic path which is implemented in index.js
   var score = 0;
   for (var i in bingo.numbers) {
     var number = bingo.numbers[i];
