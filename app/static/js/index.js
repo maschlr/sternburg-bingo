@@ -41,7 +41,7 @@ function IndexViewModel() {
     // and multiplied this number with the inverse of the number of owned caps + 1
     // that way we account for numbers, that the user owns often
     for (var i=1; i<100; i++) {
-      scoreBoard.push(Math.floor(ownedBingos.filter(function(bingo) {return bingo.numbers.indexOf(i) > -1}).length * 1000/(self.caps()[i-1].count()+1)));
+      scoreBoard.push(ownedBingos.filter(function(bingo) {return bingo.numbers.indexOf(i) > -1}).length * 1/(self.caps()[i-1].count()+1));
     }
     // go through all owned bingos and score them
     for (var i in ownedBingos) {
