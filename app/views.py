@@ -25,11 +25,15 @@ def index():
         return render_template('index.html')
 
 
-@app.route('/bingo')
+@app.route('/bingos')
 @login_required
-def bingo():
+def bingos():
     return render_template('bingo.html')
 
+@app.route('/fields')
+@login_required
+def fields():
+    return render_template('fields.html')
 
 @app.route('/caps')
 @login_required

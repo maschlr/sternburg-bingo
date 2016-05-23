@@ -27,7 +27,8 @@
         <ul class="nav">
           <li><a href="{{ url_for('index') }}">Kronkorken</a></li>
           {% if current_user.is_authenticated %}
-          <li><a href="{{ url_for('bingo') }}">Feldercheck</a></li>
+          <li><a href="{{ url_for('fields') }}">Felder</a></li>
+          <li><a href="{{ url_for('bingos') }}">Bingos</a></li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
           {% else %}
           <li><a href="{{ url_for('oauth_authorize', provider='facebook') }}">Login mit Facebook</a></li>

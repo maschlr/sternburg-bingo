@@ -4,26 +4,23 @@
 {% endblock %}
 {% block content %}
   {% if g.user.is_authenticated %}
-    <!-- ko foreach: fields -->
-      <div class="panel panel-default">
-        <div class="panel-heading" data-bind="text: $index()+1">
-        </div>
-        <table class="table table-bordered" data-bind="foreach: $data">
-          <tbody>
-            <tr data-bind="foreach: $data">
-              <td class="text-center" data-bind="css: { 'success': isOwned }">
-                <svg width=70 height=70>
-                  <circle cx="35" cy="35" r="30" stroke="black" stroke-width="2" fill="red" />
-                  <polygon points="35, 5 17.366442431225803, 59.270509831248425 63.53169548885461, 25.729490168751582 6.468304511145394, 25.729490168751575 52.633557568774194, 59.270509831248425"
-                  style="fill:white;fill-rule:nonzero;" />
-                  <text x="35" y="40" fill="black" text-anchor="middle" data-bind="text: number"></text>
-                </svg>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="row" data-bind="foreach: bingos">
+    <!-- ko if: allOwned -->
+    <div class="alert alert-success" role="alert">
+      <!-- ko foreach: numbers -->
+        <svg width=70 height=70>
+          <circle cx="35" cy="35" r="30" stroke="black" stroke-width="2" fill="red" />
+          <polygon points="35, 5 17.366442431225803, 59.270509831248425 63.53169548885461, 25.729490168751582 6.468304511145394, 25.729490168751575 52.633557568774194, 59.270509831248425"
+          style="fill:white;fill-rule:nonzero;" />
+          <text x="35" y="40" fill="black" text-anchor="middle" data-bind="text: $data"></text>
+        </svg>
+      <!-- /ko -->
+      Seite: <span data-bind="text: page"></span>
+      Reihe: <span data-bind="text: position"></span>
+      <button class="btn" data-bind="click: $parent.removeAll"><i class="icon-check"></i></button>
+    </div>
     <!-- /ko -->
+  </div>
   {% else %}
     <h1>Bitte einloggen um Bingo zu spielen</h1>
   {% endif %}
