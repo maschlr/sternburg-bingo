@@ -1,12 +1,13 @@
 .table tbody tr > td.success {
-  background-color: #68da39 !important;
+    background-color: #68da39 !important;
 }
-
 div {
-  text-align: center;
+    text-align: center;
 }
-
 svg {
-  display: block;
-  margin: auto;
+    display: block;
+    margin: auto;
+}
+svg.owned-bingo {
+    display: inline;
 }
