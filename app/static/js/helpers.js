@@ -115,15 +115,28 @@ var helpers = (function() {
         return allBingos.filter(bingo => bingo.numbers.map(number => atLeastOne.indexOf(number) > -1).every(i => i));
     }
 
-    function getNewState(oldState, bingo) {
-        let caps = oldState.caps;
-        for (let number of bingo.numbers) {
-            caps[number-1].count -= 1;
+    var State = function(caps) {
+        this.caps = caps;
+        this.bingos = getOwnedBingos(caps);
+
+        if (this.bingos.length > 0) {
+            this.children = [];
+            for (var i in this.bingos) {
+                let newCaps = caps;
+                for (var j in this.bingos[i].numbers) {
+                    let number = this.bingos[i].numbers[j];
+                    newCaps[number-1].count -= 1;
+                }
+                this.children.push(new State(newCaps));
+            }
+        } else {
+            this.children = null;
         }
-        let bingos = getOwnedBingos(caps);
+
     }
 
     return {
+        State: State,
 
         rawFields: rawFields,
 

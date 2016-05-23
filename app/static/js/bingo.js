@@ -85,6 +85,8 @@ function BingoViewModel() {
             });
         }
         self.checkBingos();
+        self.tree = new helpers.State(data.caps);
+        debugger;
     });
 }
 
